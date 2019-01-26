@@ -39,6 +39,18 @@ public class DandelionCameraController : MonoBehaviour
         }
     }
 
+    void Update()
+    {
+        if (GameObject.Find("Dandelion"))
+        {
+            target = GameObject.Find("Dandelion").transform;
+        }
+        if (GameObject.Find("Spirit(Clone)"))
+        {
+            target = GameObject.Find("Spirit(Clone)").transform;
+        }
+    }
+
     void LateUpdate()
     {
         if (target)

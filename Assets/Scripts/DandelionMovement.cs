@@ -13,47 +13,66 @@ public class DandelionMovement : MonoBehaviour
     public float gravity;
     public float speed;
     public float slerpSpeed;
+    public float returnToSpeed;
     public float rotationSpeed;
+    public float maxRotation;
     public float interpToSpeed;
+    public int numSteps;
+
+    public bool isFalling;
+
     public Camera camera;
     private Collider collider;
     private Rigidbody rb;
+    public GameObject saplingPrefab;
+    public GameObject spiritPrefab;
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        rb.freezeRotation = true;
         Physics.gravity = new Vector3(0, gravity, 0);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown("space"))
+        {
+            SpawnSapling();
+        }
     }
 
     void FixedUpdate()
     {
+        if (rb.velocity.y < -.1)
+        {
+            isFalling = true;
+        } else
+        {
+            isFalling = false;
+        }
         float moveForBack = Input.GetAxis("Vertical");
         float moveLeftRight = Input.GetAxis("Horizontal");
-        if (moveForBack != 0.0f || moveLeftRight != 0.0f)
+        if ((moveForBack != 0.0f || moveLeftRight != 0.0f) && numSteps > 0)
         {
             Vector3 dir = new Vector3(0.0f, 0.0f, 0.0f);
             if (moveForBack > 0.0f)
             {
-                dir = Camera.main.transform.forward;
+                dir = camera.transform.forward;
             }
             if (moveForBack < 0.0f)
             {
-                dir = -Camera.main.transform.forward;
+                dir = -camera.transform.forward;
             }
             if (moveLeftRight > 0.0f)
             {
-                dir = Camera.main.transform.right;
+                dir = camera.transform.right;
             }
             if (moveLeftRight < 0.0f)
             {
-                dir = -Camera.main.transform.right;
+                dir = -camera.transform.right;
             }
             dir.x = dir.x * speed * Time.deltaTime;
             dir.y = 0.0f;
@@ -63,13 +82,32 @@ public class DandelionMovement : MonoBehaviour
                                            0.0f, 
                                            Mathf.Clamp(dir.z, -1.0f, 1.0f));
             
-            this.transform.position = Vector3.SmoothDamp(this.transform.position,
-                                                         goTo, ref velocity, interpToSpeed);
+            transform.position = Vector3.SmoothDamp(this.transform.position,
+                                                     goTo, ref velocity, interpToSpeed);
+            float tiltAroundX = Mathf.Clamp(this.transform.rotation.x + (dir.z * rotationSpeed * maxRotation), -maxRotation, maxRotation);
+            float tiltAroundZ = Mathf.Clamp(this.transform.rotation.z - (dir.x * rotationSpeed * maxRotation), -maxRotation, maxRotation);
+            Quaternion rotation = Quaternion.Euler(tiltAroundX, 0.0f, tiltAroundZ);
+            transform.rotation = Quaternion.Slerp(this.transform.rotation, rotation, slerpSpeed);
+            if (!isFalling)
+            {
+                numSteps--;
+            }
         }
         else
         {
             //Debug.Log("Here");
-       
+            this.transform.rotation = Quaternion.Slerp(this.transform.rotation, Quaternion.identity, returnToSpeed);
+        }
+
+    }
+
+    void SpawnSapling()
+    {
+        if (!isFalling)
+        {
+            var spirit = (GameObject)Instantiate(spiritPrefab, transform.position + new Vector3(1.0f, 1.0f, 1.0f), new Quaternion(0.0f, 0.0f, 0.0f, 0.0f));
+            var sapling = (GameObject) Instantiate(saplingPrefab, transform.position, new Quaternion(0.0f, 0.0f, 0.0f, 0.0f));
+            Destroy(this, 0.0f);
         }
     }
 }
