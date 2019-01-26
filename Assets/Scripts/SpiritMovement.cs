@@ -25,6 +25,7 @@ public class SpiritMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
         camera = Camera.allCameras[0];
+        name = "Spirit";
     }
 
     // Update is called once per frame
@@ -77,6 +78,7 @@ public class SpiritMovement : MonoBehaviour
             dir.z = dir.z * speed * Time.deltaTime;
             transform.position = transform.position + dir * speed * Time.deltaTime;
         }
+        rb.AddForce(Vector3.down * gravity);
     }
 
     IEnumerator Jump()

@@ -92,10 +92,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf9b561a12ae600428e71bda8441590b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gravity: 0
+  gravity: 1000
   speed: 20
   interpToSpeed: 0
+  jumpForce: 5
+  JumpDelay: 0
   isFalling: 0
+  canJump: 0
   camera: {fileID: 0}
 --- !u!65 &7369889745696634480
 BoxCollider:
@@ -118,7 +121,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 739700380300377249}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 200
   m_Drag: 0
   m_AngularDrag: 0
   m_UseGravity: 1

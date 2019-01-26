@@ -31,8 +31,9 @@ public class DandelionMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        collider = GetComponent<Collider>();
         rb.freezeRotation = true;
-        Physics.gravity = new Vector3(0, gravity, 0);
+        Physics.gravity = new Vector3(0.0f, gravity, 0.0f);
     }
 
     // Update is called once per frame
@@ -105,8 +106,9 @@ public class DandelionMovement : MonoBehaviour
     {
         if (!isFalling)
         {
-            var spirit = (GameObject)Instantiate(spiritPrefab, transform.position + new Vector3(1.0f, 1.0f, 1.0f), new Quaternion(0.0f, 0.0f, 0.0f, 0.0f));
-            var sapling = (GameObject) Instantiate(saplingPrefab, transform.position, new Quaternion(0.0f, 0.0f, 0.0f, 0.0f));
+            this.collider.enabled = false;
+            var spirit = (GameObject) Instantiate(spiritPrefab, transform.position + new Vector3(2.0f, 0.0f, 2.0f), new Quaternion(0.0f, 0.0f, 0.0f, 0.0f));
+            var sapling = (GameObject) Instantiate(saplingPrefab, transform.position + new Vector3(-1.0f, 0.0f, -1.0f), new Quaternion(0.0f, 0.0f, 0.0f, 0.0f));
             Destroy(this, 0.0f);
         }
     }
