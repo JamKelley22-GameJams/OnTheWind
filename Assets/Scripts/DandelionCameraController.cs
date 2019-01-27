@@ -29,7 +29,6 @@ public class DandelionCameraController : MonoBehaviour
         Vector3 angles = transform.eulerAngles;
         x = angles.y;
         y = angles.x;
-
         rigidbody = GetComponent<Rigidbody>();
 
         // Make the rigid body not change rotation

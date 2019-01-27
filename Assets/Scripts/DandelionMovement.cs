@@ -33,6 +33,7 @@ public class DandelionMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         collider = GetComponent<Collider>();
         rb.freezeRotation = true;
+        camera = Camera.allCameras[0];
         Physics.gravity = new Vector3(0.0f, gravity, 0.0f);
     }
 
