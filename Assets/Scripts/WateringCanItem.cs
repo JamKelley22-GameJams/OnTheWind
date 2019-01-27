@@ -1,9 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class WateringCanItem : MonoBehaviour
 {
+    public GameObject _waterTxt;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,6 +26,8 @@ public class WateringCanItem : MonoBehaviour
             Manager.Instance.addItem(0);
             Debug.Log(Manager.Instance.numWateringCans);
             Destroy(this.gameObject, 0.1f);
+
+            _waterTxt.GetComponent<TMP_Text>().text = Manager.Instance.numWateringCans.ToString();
         }
     }
 }
