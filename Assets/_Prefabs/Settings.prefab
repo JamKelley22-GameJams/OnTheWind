@@ -1330,6 +1330,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _title: {fileID: 0}
   _team: {fileID: 0}
+  _audio: {fileID: 0}
+  _clip: {fileID: 0}
   _slider: {fileID: 916234754916720322}
 --- !u!1 &916234755112698483
 GameObject:

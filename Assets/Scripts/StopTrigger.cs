@@ -14,6 +14,7 @@ public class StopTrigger : MonoBehaviour
     public GameObject _levelEnded;
     public GameObject _waterCollected;
     public GameObject _waterNum;
+    public GameObject _nextDay;
 
     public void StopLevel()
     {
@@ -30,5 +31,6 @@ public class StopTrigger : MonoBehaviour
         _levelEnded.SetActive(true);
         _waterNum.SetActive(true);
         _waterCollected.SetActive(true);
+        _nextDay.SetActive(true);
     }
 }

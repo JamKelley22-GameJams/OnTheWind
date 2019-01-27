@@ -17,7 +17,7 @@ public class Menu : MonoBehaviour
     {
         _audio.clip = _clip;
         _audio.Play();
-        SceneManager.LoadScene("GameplayTestLevel");
+        SceneManager.LoadScene("GameplayTestScene");
     }
 
     public void Settings()
