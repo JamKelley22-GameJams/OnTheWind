@@ -8,6 +8,9 @@ public class UIManager : MonoBehaviour
     public GameObject _player;
     public GameObject _sunMoonCanvas;
     public GameObject _cam;
+    public AudioSource _audio;
+    public AudioClip _clip;
+    public AudioClip _clip2;
 
     // Update is called once per frame
     void Update()
@@ -19,6 +22,9 @@ public class UIManager : MonoBehaviour
             _cam.GetComponent<DandelionCameraController>().enabled = false;
             
             _pauseMenu.SetActive(true);
+
+            _audio.clip = _clip;
+            _audio.Play();
         }
 
         else if(Input.GetKeyDown(KeyCode.Escape) && _pauseMenu.activeInHierarchy == true)
@@ -28,6 +34,9 @@ public class UIManager : MonoBehaviour
             _cam.GetComponent<DandelionCameraController>().enabled = true;
 
             _pauseMenu.SetActive(false);
+
+            _audio.clip = _clip2;
+            _audio.Play();
         }
     }
 }
