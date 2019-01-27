@@ -7,6 +7,7 @@ public class SpiritMovement : MonoBehaviour
 
     public float gravity;
     public float speed;
+    public float maxSpeed;
     public float interpToSpeed;
     public float jumpForce;
     [Range(0, 2)]
@@ -23,9 +24,9 @@ public class SpiritMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        rb.freezeRotation = true;
         camera = Camera.allCameras[0];
         name = "Spirit";
+        Physics.gravity = new Vector3(0.0f, gravity, 0.0f);
     }
 
     // Update is called once per frame
@@ -36,6 +37,23 @@ public class SpiritMovement : MonoBehaviour
         {
             StartCoroutine(Jump());
         }
+        // Bit shift the index of the layer (8) to get a bit mask
+        int layerMask = 1 << 8;
+
+        // This would cast rays only against colliders in layer 8.
+        // But instead we want to collide against everything except layer 8. The ~ operator does this, it inverts a bitmask.
+        layerMask = ~layerMask;
+
+        RaycastHit hit;
+        // Does the ray intersect any objects excluding the player layer
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, 1.0f, layerMask))
+        {
+            canJump = true;
+        } else
+        {
+            canJump = false;
+        }
+        Debug.Log(1 / Time.deltaTime);
     }
 
     void FixedUpdate()
@@ -47,10 +65,6 @@ public class SpiritMovement : MonoBehaviour
         else
         {
             isFalling = false;
-            if (rb.velocity.y == 0.0f)
-            {
-                canJump = true;
-            }
         }
         float moveForBack = Input.GetAxis("Vertical");
         float moveLeftRight = Input.GetAxis("Horizontal");
@@ -76,9 +90,10 @@ public class SpiritMovement : MonoBehaviour
             dir.x = dir.x * speed * Time.deltaTime;
             dir.y = 0.0f;
             dir.z = dir.z * speed * Time.deltaTime;
-            transform.position = transform.position + dir * speed * Time.deltaTime;
+            rb.AddForce(dir);
+            Mathf.Clamp(rb.velocity.x, -maxSpeed, maxSpeed);
+            Mathf.Clamp(rb.velocity.z, -maxSpeed, maxSpeed);
         }
-        rb.AddForce(Vector3.down * gravity);
     }
 
     IEnumerator Jump()

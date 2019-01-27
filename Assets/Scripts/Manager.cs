@@ -16,7 +16,7 @@ public class Manager : MonoBehaviour
     }
 
     public int originalDayTimer;
-    public int dayTimer;
+    public float dayTimer;
 
     public int numWateringCans;
 
@@ -32,14 +32,26 @@ public class Manager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        dayTimer--;
+        dayTimer = dayTimer - Time.deltaTime;
         if (dayTimer < 0)
         {
-            Dandelion = GameObject.Find("Dandelion");
-            Sapling = GameObject.Find("Sapling(Clone)");
-            Vector3 saplingPosition = Sapling.transform.position;
-            Destroy(Sapling);
-            Dandelion.transform.position = saplingPosition;
+            if (GameObject.Find("Dandelion"))
+            {
+                Destroy(GameObject.Find("Dandelion"), 0.1f);
+                var newDandelion = (GameObject)Instantiate(dandelionPrefab, new Vector3(0.0f, 0.0f, 0.0f), new Quaternion(0.0f, 0.0f, 0.0f, 0.0f));
+                newDandelion.name = "Dandelion";
+            }
+            else
+            {
+                GameObject sapling = GameObject.Find("Sapling(Clone)");
+                GameObject spirit = GameObject.Find("Spirit");
+                Destroy(spirit, 0.0f);
+                Vector3 saplingPos = sapling.transform.position;
+                saplingPos.y = saplingPos.y + numWateringCans; 
+                var newDandelion = (GameObject)Instantiate(dandelionPrefab, saplingPos, new Quaternion(0.0f, 0.0f, 0.0f, 0.0f));
+                newDandelion.name = "Dandelion";
+                Destroy(sapling, 0.1f);
+            }
             dayTimer = originalDayTimer;
         }
     }
